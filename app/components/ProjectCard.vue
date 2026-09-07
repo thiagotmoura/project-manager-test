@@ -6,8 +6,9 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'edit': [id: string]
-  'remove': [project: Project]
+  'toggle-favorite': [id: string]
+  edit: [id: string]
+  remove: [project: Project]
 }>()
 
 const coverSrc = computed(() => props.project.coverImage || '/cover-placeholder.png')
@@ -36,7 +37,7 @@ const favoriteLabel = computed(() =>
           class="project-card__favorite"
           :aria-pressed="project.favorite"
           :aria-label="favoriteLabel"
-          @click=""
+          @click="emit('toggle-favorite', project.id)"
         >
           <IconStar :filled="project.favorite" />
         </button>
@@ -62,11 +63,11 @@ const favoriteLabel = computed(() =>
       <ul class="project-card__dates">
         <li>
           <IconCalendarDay />
-          <span><span class="sr-only">Início: </span>{{ project.startDate }}</span>
+          <span><span class="sr-only">Início: </span>{{ formatLongDate(project.startDate) }}</span>
         </li>
         <li>
           <IconCalendarCheck />
-          <span><span class="sr-only">Término: </span>{{ project.endDate }}</span>
+          <span><span class="sr-only">Término: </span>{{ formatLongDate(project.endDate) }}</span>
         </li>
       </ul>
     </div>

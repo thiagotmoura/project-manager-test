@@ -1,39 +1,36 @@
 <script setup lang="ts">
-import type { Project } from '~/types/project'
+const projectsStore = useProjectsStore()
 
-const projectsMock: Project[] = [{
-  id: "123",
-  name: "Projeto 01",
-  client: "Clicksign",
-  startDate: "01 de setembro de 2024",
-  endDate: "12 de dezembro de 2024",
-  coverImage: "/cover-placeholder.png",
-  favorite: false,
-  createdAt: "",
-  updatedAt: "",
-}]
+const projects = computed(() => projectsStore.visibleProjects)
 </script>
 
 <template>
   <div class="projects-page">
-    <EmptyState v-if="!projectsMock.length" />
+    <EmptyState v-if="!projects.length" />
 
     <template v-else>
+      <ProjectsToolbar
+        v-model:favorites-only="projectsStore.favoritesOnly"
+        v-model:sort-by="projectsStore.sortBy"
+        :total="projectsStore.total"
+      />
+
       <ul
         class="projects-grid"
         aria-label="Lista de projetos"
-        >
+      >
         <li
-        v-for="project in projectsMock"
-        :key="project.id"
+          v-for="project in projects"
+          :key="project.id"
         >
-        <ProjectCard
-        :project="project"
-        />
-      </li>
-    </ul>
-  </template>
-</div>
+          <ProjectCard
+            :project="project"
+            @toggle-favorite="projectsStore.toggleFavorite"
+          />
+        </li>
+      </ul>
+    </template>
+  </div>
 </template>
 
 <style scoped>

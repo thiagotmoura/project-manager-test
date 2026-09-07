@@ -9,7 +9,7 @@
     >
       Nenhum projeto
     </h1>
-    
+
     <p class="empty-state__text">
       Clique no botão abaixo para criar o primeiro e gerenciá-lo.
     </p>

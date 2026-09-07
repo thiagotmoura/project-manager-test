@@ -94,7 +94,6 @@ function select(action: 'edit' | 'remove') {
   box-shadow: var(--shadow-md);
 }
 
-/* Seta apontando para o botão */
 .card-menu__list::before {
   content: '';
   position: absolute;
