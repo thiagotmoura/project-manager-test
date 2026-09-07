@@ -1,7 +1,39 @@
+<script setup lang="ts">
+import type { Project } from '~/types/project'
+
+const projectsMock: Project[] = [{
+  id: "123",
+  name: "Projeto 01",
+  client: "Clicksign",
+  startDate: "01 de setembro de 2024",
+  endDate: "12 de dezembro de 2024",
+  coverImage: "/cover-placeholder.png",
+  favorite: false,
+  createdAt: "",
+  updatedAt: "",
+}]
+</script>
+
 <template>
   <div class="projects-page">
-    <EmptyState />
-  </div>
+    <EmptyState v-if="!projectsMock.length" />
+
+    <template v-else>
+      <ul
+        class="projects-grid"
+        aria-label="Lista de projetos"
+        >
+        <li
+        v-for="project in projectsMock"
+        :key="project.id"
+        >
+        <ProjectCard
+        :project="project"
+        />
+      </li>
+    </ul>
+  </template>
+</div>
 </template>
 
 <style scoped>
