@@ -10,7 +10,7 @@ export interface Project {
   updatedAt: string
 }
 
-export type ProjectInput = Omit<Project, 'id' | 'favorite'>
+export type ProjectInput = Omit<Project, 'id' | 'favorite' | 'createdAt' | 'updatedAt'>
 
 export type ProjectFormErrors = Partial<Record<keyof ProjectInput, string>>
 

@@ -45,9 +45,13 @@ export const useProjectsStore = defineStore('projects', () => {
   }
 
   function create(input: ProjectInput) {
+    const now = new Date().toISOString()
+
     const project: Project = {
       id: crypto.randomUUID(),
       favorite: false,
+      createdAt: now,
+      updatedAt: now,
       ...normalize(input),
     }
     persist([...projects.value, project])
@@ -56,7 +60,9 @@ export const useProjectsStore = defineStore('projects', () => {
 
   function update(id: string, input: ProjectInput) {
     persist(projects.value.map(project =>
-      project.id === id ? { ...project, ...normalize(input) } : project,
+      project.id === id
+        ? { ...project, ...normalize(input), updatedAt: new Date().toISOString() }
+        : project,
     ))
     return getById(id)
   }

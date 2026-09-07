@@ -1,7 +1,22 @@
 <script setup lang="ts">
+import type { Project } from '~/types/project'
+
+useHead({ title: 'Projetos' })
+
 const projectsStore = useProjectsStore()
 
+const projectToRemove = ref<Project | null>(null)
+
 const projects = computed(() => projectsStore.visibleProjects)
+
+function goToEdit(id: string) {
+  return navigateTo(`/project/${id}/edit`)
+}
+
+function confirmRemove() {
+  if (projectToRemove.value) projectsStore.remove(projectToRemove.value.id)
+  projectToRemove.value = null
+}
 </script>
 
 <template>
@@ -26,10 +41,19 @@ const projects = computed(() => projectsStore.visibleProjects)
           <ProjectCard
             :project="project"
             @toggle-favorite="projectsStore.toggleFavorite"
+            @edit="goToEdit"
+            @remove="projectToRemove = $event"
           />
         </li>
       </ul>
     </template>
+
+    <ConfirmRemoveModal
+      :open="projectToRemove !== null"
+      :project-name="projectToRemove?.name ?? ''"
+      @cancel="projectToRemove = null"
+      @confirm="confirmRemove"
+    />
   </div>
 </template>
 
