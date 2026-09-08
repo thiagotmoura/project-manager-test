@@ -14,7 +14,7 @@
       Clique no botão abaixo para criar o primeiro e gerenciá-lo.
     </p>
 
-    <BaseButton>
+    <BaseButton to="/project/new">
       <IconPlusCircle />
       Novo projeto
     </BaseButton>
