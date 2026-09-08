@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import type { Project, ProjectInput, SortOption } from '~/types/project'
 import { loadProjects, saveProjects } from '~/repositories/projects.repository'
-import { sortProjects } from '~/utils/projects'
+import { sortProjects, filterProjectsByName } from '~/utils/projects'
+import { useSearchStore } from '~/stores/search'
 
 function normalize(input: ProjectInput): ProjectInput {
   return {
@@ -13,16 +14,20 @@ function normalize(input: ProjectInput): ProjectInput {
 }
 
 export const useProjectsStore = defineStore('projects', () => {
+  const searchStore = useSearchStore()
+
   const projects = ref<Project[]>(loadProjects())
   const favoritesOnly = ref(false)
   const sortBy = ref<SortOption>('alphabetical')
 
   const total = computed(() => projects.value.length)
+  const hasProjects = computed(() => total.value > 0)
 
   const visibleProjects = computed(() => {
-    const list = favoritesOnly.value
-      ? projects.value.filter(project => project.favorite)
-      : projects.value
+    let list = projects.value
+
+    if (searchStore.isActive) list = filterProjectsByName(list, searchStore.term)
+    if (favoritesOnly.value) list = list.filter(project => project.favorite)
 
     return sortProjects(list, sortBy.value)
   })
@@ -54,6 +59,7 @@ export const useProjectsStore = defineStore('projects', () => {
       updatedAt: now,
       ...normalize(input),
     }
+  
     persist([...projects.value, project])
     return project
   }
@@ -82,6 +88,7 @@ export const useProjectsStore = defineStore('projects', () => {
     favoritesOnly,
     sortBy,
     total,
+    hasProjects,
     visibleProjects,
     getById,
     create,

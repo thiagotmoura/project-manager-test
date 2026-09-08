@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import type { Project } from '~/types/project'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   project: Project
-}>()
+  searchTerm?: string
+}>(), {
+  searchTerm: '',
+})
 
 const emit = defineEmits<{
   'toggle-favorite': [id: string]
-  edit: [id: string]
-  remove: [project: Project]
+  'edit': [id: string]
+  'remove': [project: Project]
 }>()
 
 const coverSrc = computed(() => props.project.coverImage || '/cover-placeholder.png')
@@ -51,7 +54,10 @@ const favoriteLabel = computed(() =>
 
     <div class="project-card__body">
       <h2 class="project-card__name">
-        {{ project.name }}
+        <HighlightText
+          :text="project.name"
+          :term="searchTerm"
+        />
       </h2>
 
       <p class="project-card__client">

@@ -4,10 +4,24 @@ import type { Project } from '~/types/project'
 useHead({ title: 'Projetos' })
 
 const projectsStore = useProjectsStore()
+const search = useSearchStore()
 
 const projectToRemove = ref<Project | null>(null)
 
 const projects = computed(() => projectsStore.visibleProjects)
+
+const emptyMessage = computed(() => {
+  if (search.isActive) {
+    return {
+      title: 'Nenhum projeto encontrado',
+      description: `Não encontramos projetos com “${search.term}”. Tente outro termo.`,
+    }
+  }
+  return {
+    title: 'Nenhum projeto favorito',
+    description: 'Favorite um projeto clicando na estrela para vê-lo aqui.',
+  }
+})
 
 function goToEdit(id: string) {
   return navigateTo(`/project/${id}/edit`)
@@ -21,16 +35,29 @@ function confirmRemove() {
 
 <template>
   <div class="projects-page">
-    <EmptyState v-if="!projects.length" />
+    <EmptyState v-if="!projectsStore.hasProjects" />
 
     <template v-else>
+      <div
+        v-if="search.isActive"
+        class="page-heading"
+      >
+        <BackLink @click="search.clear()" />
+
+        <h1 class="page-title">
+          Resultado da busca
+        </h1>
+      </div>
+
       <ProjectsToolbar
+        v-else
         v-model:favorites-only="projectsStore.favoritesOnly"
         v-model:sort-by="projectsStore.sortBy"
         :total="projectsStore.total"
       />
 
       <ul
+        v-if="projects.length"
         class="projects-grid"
         aria-label="Lista de projetos"
       >
@@ -40,12 +67,20 @@ function confirmRemove() {
         >
           <ProjectCard
             :project="project"
+            :search-term="search.term"
             @toggle-favorite="projectsStore.toggleFavorite"
             @edit="goToEdit"
             @remove="projectToRemove = $event"
           />
         </li>
       </ul>
+
+      <ResultsEmpty
+        v-else
+        class="projects-page__empty"
+        :title="emptyMessage.title"
+        :description="emptyMessage.description"
+      />
     </template>
 
     <ConfirmRemoveModal
