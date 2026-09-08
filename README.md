@@ -1,75 +1,40 @@
-# Nuxt Minimal Starter
+# Gerenciador de Projetos
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Aplicação para gerenciar projetos: listagem com ordenação e filtro de favoritos, criação, edição, remoção com confirmação e busca por nome com histórico.
 
-## Setup
+Não há back-end. Os projetos e o histórico de busca ficam no `localStorage`, então os dados são locais a cada navegador e se perdem ao limpar os dados do site.
 
-Make sure to install dependencies:
+Nuxt 4, Vue 3, Pinia e TypeScript. CSS puro, sem framework de UI.
+
+## Requisitos
+
+Node 20 ou superior.
+
+## Instalação
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+## Desenvolvimento
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+A aplicação sobe em http://localhost:3000.
 
-Build the application for production:
+## Testes
 
 ```bash
-# npm
+npm test
+```
+
+Vitest no ambiente do Nuxt. Os testes cobrem a validação do formulário, o destaque dos termos da busca e as stores de projetos e de busca.
+
+## Build de produção
+
+```bash
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
